@@ -11,7 +11,7 @@
 <body>
     <div class="card">
         <form class="search">
-            <input type="text" placeholder="Enter city name" spellcheck="false" autofocus>
+            <input type="text" id="cityInput" placeholder="Enter city name" spellcheck="false" autofocus>
             <button type="submit"><img src="images/search.png" alt="Search"></button>
         </form>
         <div class="weather">
@@ -36,6 +36,35 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const apikey = "b43db2b75cbaededcb19fcc7cc069fc8";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+        async function checkWeather(city) {
+            const response = await fetch(`${apiUrl}${city}&appid=${apikey}`);
+            const data = await response.json();
+
+            console.log(data);
+
+            document.querySelector(".city").innerText = data.name;
+            document.querySelector(".temp").innerText = `${Math.round(data.main.temp)}°C`;
+            document.querySelector(".humidity").innerText = `${data.main.humidity}%`;
+            document.querySelector(".wind").innerText = `${data.wind.speed} km/h`;
+        }
+
+        // Handle search event
+        document.querySelector(".search").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const city = document.getElementById("cityInput").value.trim();
+            if (city) {
+                checkWeather(city);
+            }
+        });
+
+        // Default city weather
+        checkWeather("Mumbai");
+    </script>
 </body>
 
 </html>
